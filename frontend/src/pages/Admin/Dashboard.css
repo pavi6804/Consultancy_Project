@@ -1,0 +1,79 @@
+.chart-container {
+    margin-top: 20px;
+  }
+  
+  .small-chart {
+    width: 250px;
+    margin: auto;
+  }
+  
+  .table-container {
+    margin-top: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f8f8f8;
+  }
+  
+  .export-options {
+    margin-top: 20px;
+  }
+  
+  .filter-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .filter-section label {
+    font-weight: bold;
+  }
+  
+  .filter-section select,
+  .filter-section input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .toggle-buttons {
+    margin: 20px 0;
+  }
+  
+  .toggle-buttons button {
+    padding: 10px;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .toggle-buttons .active {
+    background-color: #36A2EB;
+    color: white;
+  }
+
+  .charts-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .charts-container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
