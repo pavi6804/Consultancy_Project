@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./BrowseStock.css";
+import "./AdminBrowseStock.css";
 import {
   FaBox,
   FaRupeeSign,

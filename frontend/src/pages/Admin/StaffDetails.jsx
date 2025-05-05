@@ -3,6 +3,10 @@ import "./StaffDetails.css";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify"; // Import Toastify and ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import {
+  FaEdit,
+  FaTrashAlt,
+} from "react-icons/fa";
 
 const StaffDetails = () => {
   const [staffList, setStaffList] = useState([]);
@@ -126,8 +130,16 @@ const StaffDetails = () => {
               <td>{staff.phone}</td>
               <td>{staff.address}</td>
               <td>
-                <button className="edit-btn" onClick={() => handleEdit(staff)}>Edit</button>
-                <button className="delete-btn" onClick={() => setDeleteId(staff._id)}>Delete</button> {/* Pass `_id` */}
+                <div className="actions">
+                  <FaEdit
+                    className="action-icon edit-icon"
+                    onClick={() => handleEdit(staff)}
+                  />
+                  <FaTrashAlt
+                    className="action-icon delete-icon"
+                    onClick={() => setDeleteId(staff._id)}
+                  />
+                </div>
               </td>
             </tr>
           ))}

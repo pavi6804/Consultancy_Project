@@ -1,39 +1,101 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Dashboard from "./pages/Admin/DashBoard";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from "react-router-dom";
+
+// navbar components
+import AdminNavbar from "./components/AdminNavbar";
+import StaffNavbar from "./components/StaffNavbar";
+import CustomerNavbar from "./components/CustomerNavbar";
+
+// admin pages
+import AdminDashboard from "./pages/Admin/AdminDashBoard";
 import StaffDetails from "./pages/Admin/StaffDetails";
-import PurchaseSales from "./pages/PurchaseSales";
-import BrowseStock from "./pages/BrowseStock";
-import Comments from "./pages/Admin/StaffComments";
+import AdminPurchaseSales from "./pages/Admin/AdminPurchaseSales";
+import AdminBrowseStock from "./pages/Admin/AdminBrowseStock";
+
+// staff pages
+import StaffDashboard from "./pages/Staff/StaffDashboard";
+import StaffPurchaseSales from "./pages/Staff/StaffPurchaseSales";
+import StaffBrowseStock from "./pages/Staff/StaffBrowseStock";
+
+// customer pages
+import CustomerBrowseStock from "./pages/Customer/CustomerBrowseStock";
+import Home from "./pages/Customer/Home";
+import ContactUs from "./pages/Customer/ContactUs";
+
+// Authentication pages
+import Login from "./pages/Authentication/Login";
+import Register from "./pages/Authentication/Register";
 
 const App = () => {
-  const [startDate, setStartDate] = useState("2024-03-12");
-  const [endDate, setEndDate] = useState("2025-03-11");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole] = useState(null);
 
-  const salesData = Array.from({ length: 100 }, (_, i) => {
-    const randomDay = Math.floor(Math.random() * 365);
-    const date = new Date(2024, 2, 12 + randomDay).toISOString().split("T")[0];
-    return {
-      date,
-      description: `Transaction ${i + 1}`,
-      type: i % 2 === 0 ? "Towel" : "Bedsheet",
-      items: Math.floor(Math.random() * 10) + 1,
-      price: Math.floor(Math.random() * 500) + 100,
-      company: i % 2 === 0 ? "ABC Textiles" : "XYZ Fabrics",
-      transactionType: i % 2 === 0 ? "Purchase" : "Sale",
-    };
-  });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userRole = localStorage.getItem("role");
+    if (token && userRole) {
+      setIsAuthenticated(true);
+      setRole(userRole);
+    }
+  }, []);
+
+  const onLogin = (userRole) => {
+    setIsAuthenticated(true);
+    setRole(userRole);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setRole(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+  };
 
   return (
     <Router>
-      <Navbar />
+      {isAuthenticated && (
+        <>
+          {role === "admin" && <AdminNavbar onLogout={handleLogout} />}
+          {role === "staff" && <StaffNavbar onLogout={handleLogout} />}
+          {role === "customer" && <CustomerNavbar onLogout={handleLogout} />}
+        </>
+      )}
       <Routes>
-        <Route path="/admin" element={<Dashboard salesData={salesData} startDate={startDate} endDate={endDate} />} />
-        <Route path="/admin/staff" element={<StaffDetails />} />
-        <Route path="/admin/purchase-sales" element={<PurchaseSales />} />
-        <Route path="/admin/stock" element={<BrowseStock />} />
-        <Route path="/admin/comments" element={<Comments />} />
+        {!isAuthenticated ? (
+          <>
+            <Route path="/login" element={<Login onLogin={(role) => onLogin(role)}/>} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </>
+        ) : (
+          <>
+            {role === "admin" && (
+              <>
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                <Route path="/staff" element={<StaffDetails />} />
+                <Route path="/purchase-sales" element={<AdminPurchaseSales />} />
+                <Route path="/stock" element={<AdminBrowseStock />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
+              </>
+            )}
+            {role === "staff" && (
+              <>
+                <Route path="/staff-dashboard" element={<StaffDashboard />} />
+                <Route path="/purchase-sales" element={<StaffPurchaseSales />} />
+                <Route path="/stock" element={<StaffBrowseStock />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
+              </>
+            )}
+            {role === "customer" && (
+              <>
+                <Route path="/" element={< Home />} />
+                <Route path="/browse-stock" element={<CustomerBrowseStock />} />
+                <Route path="/contact-us" element={< ContactUs/> } />
+                <Route path="*" element={<Navigate to="/" />} />
+              </>
+            )}
+          </>
+        )}
       </Routes>
     </Router>
   );

@@ -6,9 +6,12 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable"; // Correctly import the plugin
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Dashboard.css";
+import "./AdminDashboard.css";
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
@@ -17,6 +20,7 @@ const Dashboard = () => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -148,9 +152,9 @@ const Dashboard = () => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
-    autoTable(doc); // Ensure the plugin is registered with jsPDF
-    doc.text(`Transactions Report (${filterType})`, 20, 10);
-    doc.autoTable({
+    
+    doc.text(`Transactions Report (${filterType})`, 14, 10);
+    autoTable(doc,{
       head: [["Date", "Type", "Item", "Category", "Quantity", "Price", "Company", "Description"]],
       body: filteredData.map((item) => [
         formatDate(item.date),
@@ -162,6 +166,8 @@ const Dashboard = () => {
         item.company,
         item.description,
       ]),
+      theme: "striped", // Optional: Add a theme for better styling
+      styles: { fontSize: 10 },
     });
     doc.save(`Transactions_Report_${filterType}.pdf`);
   };
@@ -273,6 +279,72 @@ const Dashboard = () => {
             <div className="small-chart">
               <h3>Category Breakdown</h3>
               <Pie data={updatedCategoryChartData} />
+            </div>
+            <div className="small-chart">
+              <h3>Men's Purchase vs Sale</h3>
+              <Pie
+                data={{
+                  labels: ["Men's Purchases", "Men's Sales"],
+                  datasets: [
+                    {
+                      data: [
+                        filteredData
+                          .filter((item) => item.category === "Men" && item.transactionType === "Purchase")
+                          .reduce((sum, item) => sum + item.price * item.quantity, 0),
+                        filteredData
+                          .filter((item) => item.category === "Men" && item.transactionType === "Sale")
+                          .reduce((sum, item) => sum + item.price * item.quantity, 0),
+                      ],
+                      backgroundColor: ["#FF6384", "#36A2EB"],
+                      hoverBackgroundColor: ["#FF4365", "#2F90D9"],
+                    },
+                  ],
+                }}
+              />
+            </div>
+            <div className="small-chart">
+              <h3>Women's Purchase vs Sale</h3>
+              <Pie
+                data={{
+                  labels: ["Women's Purchases", "Women's Sales"],
+                  datasets: [
+                    {
+                      data: [
+                        filteredData
+                          .filter((item) => item.category === "Women" && item.transactionType === "Purchase")
+                          .reduce((sum, item) => sum + item.price * item.quantity, 0),
+                        filteredData
+                          .filter((item) => item.category === "Women" && item.transactionType === "Sale")
+                          .reduce((sum, item) => sum + item.price * item.quantity, 0),
+                      ],
+                      backgroundColor: ["#FF9F40", "#FF6384"],
+                      hoverBackgroundColor: ["#FF7F20", "#FF4365"],
+                    },
+                  ],
+                }}
+              />
+            </div>
+            <div className="small-chart">
+              <h3>Kids' Purchase vs Sale</h3>
+              <Pie
+                data={{
+                  labels: ["Kids' Purchases", "Kids' Sales"],
+                  datasets: [
+                    {
+                      data: [
+                        filteredData
+                          .filter((item) => item.category === "Kids" && item.transactionType === "Purchase")
+                          .reduce((sum, item) => sum + item.price * item.quantity, 0),
+                        filteredData
+                          .filter((item) => item.category === "Kids" && item.transactionType === "Sale")
+                          .reduce((sum, item) => sum + item.price * item.quantity, 0),
+                      ],
+                      backgroundColor: ["#36A2EB", "#FFCE56"],
+                      hoverBackgroundColor: ["#2F90D9", "#E6B800"],
+                    },
+                  ],
+                }}
+              />
             </div>
           </div>
         </div>

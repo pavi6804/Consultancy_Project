@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require('./config/db'); // Import the database connection
 const stockRoutes = require('./routes/stockRoutes'); // Import stock-related routes
 const transactionRoutes = require('./routes/transactionRoutes'); // Import transaction-related routes
+const userRoutes = require("./routes/userRoute");
 
 const app = express();
 require('dotenv').config();
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use(cors({ origin: "http://localhost:5173" })); // Allow requests from the frontend
 app.use(express.json()); // Parse JSON request bodies
+app.use("/users", userRoutes); 
 app.use('/staff', staffRoutes); // Route for staff-related API endpoints
 app.use('/stock', stockRoutes); // Route for stock-related API endpoints
 app.use('/transactions', transactionRoutes); // Route for transaction-related API endpoints

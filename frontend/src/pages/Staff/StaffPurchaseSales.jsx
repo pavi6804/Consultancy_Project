@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify"; // Ensure ToastContainer is imported
 import "react-toastify/dist/ReactToastify.css";
+import {
+  FaEdit,
+  FaTrashAlt,
+} from "react-icons/fa";
 
-import "./PurchaseSales.css"; // Import the CSS file
+import "./StaffPurchaseSales.css"; // Import the CSS file
 
 const PurchaseSales = () => {
   const [transactions, setTransactions] = useState([]);
@@ -202,7 +206,7 @@ const PurchaseSales = () => {
       <ToastContainer /> {/* Add ToastContainer here */}
       <h2>📦 Purchase & Sales Management</h2>
 
-      <button className="add-btn" onClick={() => setShowForm(true)}>➕ Add Transaction</button>
+      <button className="add-btn" onClick={() => setShowForm(true)}>➕ Add New Transaction</button>
 
       {showForm && (
         <div className="form-container">
@@ -299,8 +303,18 @@ const PurchaseSales = () => {
                   <td>{transaction.company}</td>
                   <td>{transaction.description}</td>
                   <td>
-                    <button onClick={() => handleEditTransaction(index)}>Edit</button>
-                    <button className="delete-btn" onClick={() => setDeleteIndex(index)}>Delete</button>
+                    <div className="actions">
+                      <FaEdit
+                        className="action-icon edit-icon"
+                        onClick={() => handleEditTransaction(index)}
+                      />
+                      <FaTrashAlt
+                        className="action-icon delete-icon"
+                        onClick={() =>
+                          setDeleteIndex(index)
+                        }
+                      />
+                    </div>
                   </td>
                 </tr>
               ))
