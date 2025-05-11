@@ -6,8 +6,8 @@ import {
   FaEdit,
   FaTrashAlt,
 } from "react-icons/fa";
-
-import "./StaffPurchaseSales.css"; // Import the CSS file
+import { API } from "../../utils/api.js"; // Correct for default export
+// Import the CSS file
 
 const PurchaseSales = () => {
   const [transactions, setTransactions] = useState([]);
@@ -30,7 +30,7 @@ const PurchaseSales = () => {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/stock");
+        const response = await axios.get(`${ API }stock`);
         setStockData(response.data);
       } catch (error) {
         console.error("Failed to fetch stock data.");
@@ -39,7 +39,7 @@ const PurchaseSales = () => {
 
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/transactions");
+        const response = await axios.get(`${ API }transactions`);
         setTransactions(response.data);
       } catch (error) {
         console.error("Failed to fetch transactions.");
@@ -59,7 +59,7 @@ const PurchaseSales = () => {
 
   const updateStockQuantity = async (stockItem, quantityChange) => {
     try {
-      await axios.put(`http://localhost:3000/stock/${stockItem._id}`, {
+      await axios.put(`${ API }stock/${stockItem._id}`, {
         ...stockItem,
         quantity: stockItem.quantity + quantityChange,
       });
@@ -110,7 +110,7 @@ const PurchaseSales = () => {
         await updateStockQuantity(stockItem, oldQuantityChange + quantityChange);
 
         const transactionId = transactions[editingIndex]._id;
-        const response = await axios.put(`http://localhost:3000/transactions/${transactionId}`, newTransaction);
+        const response = await axios.put(`${ API }transactions/${transactionId}`, newTransaction);
         const updatedTransactions = [...transactions];
         updatedTransactions[editingIndex] = response.data.updatedTransaction;
         setTransactions(updatedTransactions);
@@ -119,7 +119,7 @@ const PurchaseSales = () => {
         await updateStockQuantity(stockItem, quantityChange);
 
         try {
-          const response = await axios.post("http://localhost:3000/transactions", newTransaction);
+          const response = await axios.post(`${ API }transactions`, newTransaction);
           setTransactions([...transactions, response.data.newTransaction]);
           toast.success("Transaction added successfully!"); // Toastify success message
         } catch (error) {
@@ -180,7 +180,7 @@ const PurchaseSales = () => {
       await updateStockQuantity(stockItem, quantityChange);
 
       const transactionId = transaction._id;
-      await axios.delete(`http://localhost:3000/transactions/${transactionId}`);
+      await axios.delete(`${ API }transactions/${transactionId}`);
       setTransactions(transactions.filter((_, i) => i !== deleteIndex));
       toast.success("Transaction deleted successfully!"); // Toastify success message
     } catch (error) {

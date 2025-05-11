@@ -7,6 +7,7 @@ import {
   FaEdit,
   FaTrashAlt,
 } from "react-icons/fa";
+import { API } from "../../utils/api.js"; // Correct for default export
 
 const StaffDetails = () => {
   const [staffList, setStaffList] = useState([]);
@@ -16,7 +17,7 @@ const StaffDetails = () => {
 
   // Fetch staff data from backend
   useEffect(() => {
-    axios.get("http://localhost:3000/staff")
+    axios.get(`${ API }staff`)
       .then((response) => setStaffList(Array.isArray(response.data) ? response.data : []))
       .catch((error) => console.error("Error fetching staff data:", error));
   }, []);
@@ -36,7 +37,7 @@ const StaffDetails = () => {
         return;
       }
       axios
-        .put(`http://localhost:3000/staff/${id}`, data, { headers: { "Content-Type": "application/json" } })
+        .put(`${ API }staff/${id}`, data, { headers: { "Content-Type": "application/json" } })
         .then((response) => {
           setStaffList(staffList.map((staff) => (staff._id === id ? response.data : staff)));
           setIsEditing(false);
@@ -45,7 +46,7 @@ const StaffDetails = () => {
         .catch((error) => console.error("Error updating staff:", error));
     } else {
       axios
-        .post("http://localhost:3000/staff", data, { headers: { "Content-Type": "application/json" } })
+        .post("${ API }staff", data, { headers: { "Content-Type": "application/json" } })
         .then((response) => {
           setStaffList([...staffList, response.data]);
           toast.success("Staff added successfully!"); // Toastify success message
@@ -71,7 +72,7 @@ const StaffDetails = () => {
   // Handle Delete
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/staff/${deleteId}`);
+      await axios.delete(`${ API }staff/${deleteId}`);
       setStaffList(staffList.filter((staff) => staff._id !== deleteId));
       toast.success("Staff deleted successfully!");
     } catch (error) {

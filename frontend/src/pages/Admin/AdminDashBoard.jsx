@@ -7,11 +7,9 @@ import autoTable from "jspdf-autotable"; // Correctly import the plugin
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./AdminDashboard.css";
-
+import { API } from "../../utils/api.js"; // Correct for default export
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
@@ -20,14 +18,19 @@ const Dashboard = () => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  
+  const [transactionData, setTransactionData] = useState({ online: 0, offline: 0 });
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/transactions");
+        const response = await axios.get(`${ API }transactions`);
         console.log("Fetched transactions:", response.data); // Debugging log
         setTransactions(response.data);
+
+        const transactions = response.data;
+        const online = transactions.filter((t) => t.transactionType === "Online").length;
+        const offline = transactions.filter((t) => t.transactionType === "Offline").length;
+        setTransactionData({ online, offline });
       } catch (error) {
         console.error("Error fetching transactions:", error); // Log the error
         toast.error("Failed to fetch transactions.");
@@ -173,16 +176,34 @@ const Dashboard = () => {
   };
 
   const sendEmail = async () => {
-    try {
-      await axios.post("http://localhost:3000/send-email", {
+    console.log({
         subject: `Transactions Report (${filterType})`,
         body: filteredData,
+      });
+
+    try {
+
+      
+      await axios.post(`${ API }send-email`, {
+        subject: `Transactions Report (${filterType})`,
+        body: filteredData, // Replace with the actual email of the logged-in user
       });
       toast.success("Report sent via email successfully!");
     } catch (error) {
       console.error("Failed to send email:", error);
       toast.error("Failed to send report via email.");
     }
+  };
+
+  const data = {
+    labels: ["Online", "Offline"],
+    datasets: [
+      {
+        data: [transactionData.online, transactionData.offline],
+        backgroundColor: ["#36A2EB", "#FF6384"],
+        hoverBackgroundColor: ["#36A2EB", "#FF6384"],
+      },
+    ],
   };
 
   return (
@@ -345,6 +366,9 @@ const Dashboard = () => {
                   ],
                 }}
               />
+            </div>
+            <div style={{ width: "50%", margin: "0 auto" }}>
+              <Pie data={data} />
             </div>
           </div>
         </div>

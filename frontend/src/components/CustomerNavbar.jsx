@@ -10,10 +10,16 @@ const CustomerNavbar = ({ onLogout }) => {
       </div>
       <ul className="nav-links">
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/home">Home</Link>
         </li>
         <li>
           <Link to="/browse-stock">Browse Stock</Link>
+        </li>
+        <li>
+          <Link to="/cart">Cart</Link>
+        </li>
+        <li>
+          <Link to="/order-history">Order History</Link>
         </li>
         <li>
           <Link to="/contact-us">Contact Us</Link>

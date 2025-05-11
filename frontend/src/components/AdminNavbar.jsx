@@ -6,7 +6,7 @@ const AdminNavbar = ({ onLogout }) => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">Senthil Textiles</Link>
+        <Link to="/">Senthill Textiles</Link>
       </div>
       <ul className="nav-links">
         <li>

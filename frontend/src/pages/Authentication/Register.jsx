@@ -3,6 +3,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Authentication.css";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../utils/api.js"; // Correct for default export
 
 function Register({ toggleForm }) {
   const [username, setUsername] = useState("");
@@ -25,7 +26,7 @@ function Register({ toggleForm }) {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/users/register", {
+      const response = await fetch(`${ API }users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

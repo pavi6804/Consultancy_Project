@@ -4,6 +4,7 @@ const {
     addTransaction,
     updateTransaction,
     deleteTransaction,
+    getTransactions,
 } = require("../controller/transactionController");
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router.put("/:id", updateTransaction);
 
 // Route to delete a transaction by ID
 router.delete("/:id", deleteTransaction);
+
+// Route to fetch transactions
+router.get("/transactions", getTransactions);
 
 module.exports = router;

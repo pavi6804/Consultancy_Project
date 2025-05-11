@@ -21,6 +21,10 @@ import StaffBrowseStock from "./pages/Staff/StaffBrowseStock";
 import CustomerBrowseStock from "./pages/Customer/CustomerBrowseStock";
 import Home from "./pages/Customer/Home";
 import ContactUs from "./pages/Customer/ContactUs";
+import CartPage from "./pages/Customer/CartPage";
+import CheckoutPage from "./pages/Customer/CheckoutPage";
+import OrderHistory from "./pages/Customer/CustomerOrderHistory";
+import Payment from "./pages/Customer/Payment";
 
 // Authentication pages
 import Login from "./pages/Authentication/Login";
@@ -29,13 +33,25 @@ import Register from "./pages/Authentication/Register";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
+  const [cart, setCart] = useState([]);
+  //const [userId, setUserId] = useState(null);
+  const userId = localStorage.getItem("userId"); // Ensure userId is stored in localStorage after login
+  const username = localStorage.getItem("username");
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userRole = localStorage.getItem("role");
-    if (token && userRole) {
+    //const userId = localStorage.getItem("userId");
+ 
+    if (token && userRole && userId) {
       setIsAuthenticated(true);
       setRole(userRole);
+      //setUserId(storedUserId); // <-- Ensure state is updated
+    } else {
+      setIsAuthenticated(false);
+      setRole(null);
+      //setUserId(null);
     }
   }, []);
 
@@ -49,6 +65,8 @@ const App = () => {
     setRole(null);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
   };
 
   return (
@@ -75,7 +93,7 @@ const App = () => {
                 <Route path="/staff" element={<StaffDetails />} />
                 <Route path="/purchase-sales" element={<AdminPurchaseSales />} />
                 <Route path="/stock" element={<AdminBrowseStock />} />
-                <Route path="*" element={<Navigate to="/dashboard" />} />
+                <Route path="*" element={<Navigate to="/admin-dashboard" />} />
               </>
             )}
             {role === "staff" && (
@@ -83,15 +101,19 @@ const App = () => {
                 <Route path="/staff-dashboard" element={<StaffDashboard />} />
                 <Route path="/purchase-sales" element={<StaffPurchaseSales />} />
                 <Route path="/stock" element={<StaffBrowseStock />} />
-                <Route path="*" element={<Navigate to="/dashboard" />} />
+                <Route path="*" element={<Navigate to="/staff-dashboard" />} />
               </>
             )}
             {role === "customer" && (
               <>
-                <Route path="/" element={< Home />} />
-                <Route path="/browse-stock" element={<CustomerBrowseStock />} />
+                <Route path="/home" element={< Home />} />
+                <Route path="/browse-stock" element={<CustomerBrowseStock userId={userId} />} />
+                <Route path="/cart" element={<CartPage userId = {userId} />} />
+                <Route path="/checkout" element={<CheckoutPage userId={userId} cart={cart} />} /> 
+                <Route path="/order-history" element={<OrderHistory userId={ userId } username={ username }/>} />
                 <Route path="/contact-us" element={< ContactUs/> } />
-                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="*" element={<Navigate to="/home" />} />
+                <Route path="/payment" element={<Payment userId={userId} />} />
               </>
             )}
           </>

@@ -7,11 +7,9 @@ import autoTable from "jspdf-autotable"; // Correctly import the plugin
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./StaffDashboard.css";
-
+import { API } from "../../utils/api.js"; // Correct for default export
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-
 
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
@@ -20,14 +18,19 @@ const Dashboard = () => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  
+  const [transactionData, setTransactionData] = useState({ online: 0, offline: 0 });
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/transactions");
+        const response = await axios.get(`${ API }transactions`);
         console.log("Fetched transactions:", response.data); // Debugging log
         setTransactions(response.data);
+
+        const transactions = response.data;
+        const online = transactions.filter((t) => t.transactionType === "Online").length;
+        const offline = transactions.filter((t) => t.transactionType === "Offline").length;
+        setTransactionData({ online, offline });
       } catch (error) {
         console.error("Error fetching transactions:", error); // Log the error
         toast.error("Failed to fetch transactions.");
@@ -174,7 +177,7 @@ const Dashboard = () => {
 
   const sendEmail = async () => {
     try {
-      await axios.post("http://localhost:3000/send-email", {
+      await axios.post(`${ API }send-email`, {
         subject: `Transactions Report (${filterType})`,
         body: filteredData,
       });
@@ -183,6 +186,17 @@ const Dashboard = () => {
       console.error("Failed to send email:", error);
       toast.error("Failed to send report via email.");
     }
+  };
+
+  const onlineOfflineData = {
+    labels: ["Online", "Offline"],
+    datasets: [
+      {
+        data: [transactionData.online, transactionData.offline],
+        backgroundColor: ["#36A2EB", "#FF6384"],
+        hoverBackgroundColor: ["#36A2EB", "#FF6384"],
+      },
+    ],
   };
 
   return (
@@ -345,6 +359,10 @@ const Dashboard = () => {
                   ],
                 }}
               />
+            </div>
+            <div className="small-chart">
+              <h3>Online vs Offline Transactions</h3>
+              <Pie data={onlineOfflineData} />
             </div>
           </div>
         </div>

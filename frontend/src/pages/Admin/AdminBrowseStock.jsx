@@ -13,6 +13,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { API } from "../../utils/api.js"; 
 
 const BrowseStock = () => {
   const [search, setSearch] = useState("");
@@ -38,7 +39,7 @@ const BrowseStock = () => {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/stock");
+        const response = await axios.get(`${ API }stock`);
         setStockData(response.data);
       } catch (error) {
         toast.error("Failed to fetch stock data.");
@@ -69,7 +70,7 @@ const BrowseStock = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/stock", newProduct);
+      const response = await axios.post(`${ API }stock`, newProduct);
       setStockData([...stockData, response.data.newStockItem]);
       setNewProduct({ name: "", category: "", quantity: 0, price: 0, description: "" });
       setIsPopupOpen(false);
@@ -103,7 +104,7 @@ const BrowseStock = () => {
   
       // Make the API call to update the product
       const response = await axios.put(
-        `http://localhost:3000/stock/${editingProduct._id}`,
+        `${ API }stock/${editingProduct._id}`,
         editingProduct
       );
   
@@ -130,7 +131,7 @@ const BrowseStock = () => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.delete(`http://localhost:3000/stock/${productId}`);
+      await axios.delete(`${ API }stock/${productId}`);
       setStockData((prev) => prev.filter((item) => item._id !== productId));
       toast.success("Product deleted successfully!");
     } catch (error) {
@@ -257,7 +258,7 @@ const BrowseStock = () => {
             filteredStock.map((stock, index) => (
               <div
                 key={index}
-                className={`stock-card ${stock.quantity < 10 ? "low-stock" : ""}`}
+                className={`stock-card ${stock.quantity < 5 ? "low-stock" : ""}`}
                 data-category={stock.category}
                 style={{
                   borderColor:
@@ -317,8 +318,8 @@ const BrowseStock = () => {
                     <p><FaBoxes /> Available: {stock.quantity}</p>
                     <p><strong>Category:</strong> {stock.category}</p>
                     <p className="status">
-                      {stock.quantity < 10 ? <FaExclamationTriangle className="low-stock" /> : <FaCheckCircle className="in-stock" />}
-                      {stock.quantity < 10 ? " Restock Needed" : " In Stock"}
+                      {stock.quantity < 5 ? <FaExclamationTriangle className="low-stock" /> : <FaCheckCircle className="in-stock" />}
+                      {stock.quantity < 5 ? " Restock Needed" : " In Stock"}
                     </p>
                     <div className="actions">
                       <FaEdit
