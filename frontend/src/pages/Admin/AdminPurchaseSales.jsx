@@ -42,7 +42,7 @@ const PurchaseSales = () => {
         const response = await axios.get(`${ API }transactions`);
         const transactions = response.data;
 
-        setTransactions([...transactions, ...onlineOrders]);
+        setTransactions(transactions);
       } catch (error) {
         console.error("Failed to fetch transactions.");
       }

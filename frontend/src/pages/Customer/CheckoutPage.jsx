@@ -26,19 +26,10 @@ const CheckoutPage = () => {
     }
 
     try {
-      const response = await axios.post(`${ API }orders/place`, {
-        userId,
-        address,
-        phoneNumber,
-      });
-
-      if (response.status === 200) {
-        alert('Order placed successfully!');
-        navigate('/payment');
-      }
+      // Proceed to payment without showing success message here
+      navigate('/payment');
     } catch (err) {
-      console.error('Error placing order:', err);
-      setError('Failed to place order. Please try again.');
+      setError('An error occurred during checkout. Please try again.');
     }
   };
 

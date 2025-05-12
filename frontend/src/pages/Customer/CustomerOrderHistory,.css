@@ -1,0 +1,77 @@
+/* Customer Order History Styles */
+.order-history-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Table styling */
+.order-history-table {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.order-history-table th,
+.order-history-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.order-history-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.order-history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.order-history-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .order-history-table {
+        font-size: 14px;
+    }
+}
+
+.order-history-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.order-history-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.order-history-actions button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.order-history-actions button:hover {
+    background-color: #0056b3;
+}

@@ -1,194 +1,157 @@
-/* --- General Page Layout --- */
+
 .browse-stock-container {
-  padding: 30px;
-  background-color: #f4f7fa;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Segoe UI", sans-serif;
+  padding: 2rem;
+  font-family: var(--font-family);
+  background-color: #fff;
 }
 
-/* --- Header Title --- */
-.browse-stock-container h2 {
-  font-size: 32px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
 }
 
-/* --- Search Bar --- */
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.search-bar .search-icon {
-  color: #555;
-  margin-right: 10px;
+  margin-bottom: 1rem;
+  background: #ecf0f1;
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
 }
 
 .search-bar input {
   border: none;
   outline: none;
-  font-size: 16px;
+  background: transparent;
   flex: 1;
+  font-size: 1rem;
+  padding: 0.5rem;
 }
 
-/* --- Category Boxes --- */
+.search-icon {
+  color: #888;
+  margin-right: 8px;
+}
+
 .categories {
   display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
+  gap: 1rem;
+  margin: 1rem 0;
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 .category-box {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 15px;
+  gap: 0.5rem;
   border: 2px solid #ccc;
-  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #fff;
-  min-width: 120px;
+  transition: var(--transition);
+  background-color: white;
 }
 
-.category-box span {
-  margin-top: 8px;
-  font-weight: bold;
-  color: #333;
-}
-
+.category-box:hover,
 .category-box.active {
-  background-color: #e6f0ff;
+  background-color: var(--light-gray);
+  border-width: 2px;
 }
 
-.category-box:hover {
-  transform: translateY(-4px);
-  border-color: #007bff;
-}
-
-/* --- Add Product Button --- */
 .add-product-btn {
-  padding: 12px 24px;
-  background-color: #007bff;
+  background-color: var(--secondary-color);
   color: white;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  padding: 10px 16px;
+  margin-bottom: 1rem;
   font-weight: bold;
-  margin-bottom: 30px;
-  transition: background-color 0.3s ease;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .add-product-btn:hover {
-  background-color: #0056b3;
+  background-color: #27ae60;
 }
 
-/* --- Stock Cards Grid --- */
 .stock-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  width: 100%;
-  max-width: 1200px;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
-/* --- Individual Stock Card --- */
 .stock-card {
-  background-color: white;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  padding: 20px;
-  width: 260px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
-
-.stock-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  border: 2px solid #ccc;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .stock-card.low-stock {
-  border-color: #e74c3c;
+  border-color: var(--warning-color);
+  background-color: #fff8e1;
 }
 
-.stock-card .item-name {
-  font-size: 18px;
+.item-name {
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #444;
-  margin-bottom: 10px;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
 }
 
-.stock-card p {
-  font-size: 14px;
-  color: #555;
-  margin: 5px 0;
-}
-
-.stock-card .status {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.stock-card .low-stock {
-  color: #e74c3c;
-}
-
-.stock-card .in-stock {
-  color: #28a745;
-}
-
-.stock-card .actions {
+.status {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 12px;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
 }
 
-.stock-card .action-icon {
+.in-stock {
+  color: var(--secondary-color);
+}
+
+.low-stock {
+  color: var(--warning-color);
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.action-icon {
   cursor: pointer;
-  font-size: 18px;
-  transition: color 0.3s ease;
+  font-size: 1.1rem;
+  transition: var(--transition);
 }
 
 .edit-icon {
-  color: #007bff;
+  color: #2980b9;
 }
+
 .edit-icon:hover {
-  color: #0056b3;
+  color: #3498db;
 }
 
 .delete-icon {
-  color: #e74c3c;
+  color: var(--danger-color);
 }
+
 .delete-icon:hover {
   color: #c0392b;
 }
 
-/* --- Popup Overlay for Add/Edit Form --- */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
   z-index: 999;
   display: flex;
   align-items: center;
@@ -197,17 +160,11 @@
 
 .popup-form {
   background-color: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 400px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-.popup-form h3 {
-  font-size: 22px;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .popup-form input,
@@ -215,146 +172,95 @@
 .popup-form textarea {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: var(--border-radius);
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
+  font-size: 1rem;
 }
 
 .popup-actions {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  margin-top: 1rem;
 }
 
 .popup-actions button {
-  flex: 1;
-  padding: 10px 0;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 14px;
+  border-radius: var(--border-radius);
   cursor: pointer;
+  font-weight: bold;
 }
 
 .popup-actions button:first-child {
-  background-color: #28a745;
+  background-color: var(--secondary-color);
   color: white;
-}
-.popup-actions button:first-child:hover {
-  background-color: #218838;
 }
 
 .popup-actions button:last-child {
-  background-color: #dc3545;
+  background-color: #bbb;
   color: white;
 }
-.popup-actions button:last-child:hover {
-  background-color: #c82333;
+
+.cancel-btn {
+  background-color: #95a5a6;
+  color: white;
 }
 
-/* --- Confirmation Modal --- */
+.no-results {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
 .confirm-modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .confirm-modal-content {
   background: white;
-  padding: 25px 30px;
-  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  border-radius: var(--border-radius);
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.confirm-modal-content p {
-  font-size: 16px;
-  margin-bottom: 20px;
-  color: #333;
+  max-width: 360px;
 }
 
 .confirm-modal-actions {
+  margin-top: 1rem;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-evenly;
 }
 
 .confirm-modal-actions button {
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 0.5rem 1rem;
   border: none;
+  border-radius: var(--border-radius);
   font-weight: bold;
-  font-size: 14px;
   cursor: pointer;
 }
 
 .confirm-modal-actions button:first-child {
-  background-color: #28a745;
+  background-color: var(--danger-color);
   color: white;
-}
-
-.confirm-modal-actions button:first-child:hover {
-  background-color: #218838;
 }
 
 .confirm-modal-actions button:last-child {
-  background-color: #dc3545;
+  background-color: #7f8c8d;
   color: white;
 }
 
-.confirm-modal-actions button:last-child:hover {
-  background-color: #c82333;
-}
-
-/* --- No Results Styling --- */
-.no-results {
-  color: #999;
-  font-size: 16px;
-  margin-top: 20px;
-  font-style: italic;
-}
-
-/* --- Error Boundary Styling --- */
 .error-boundary {
-  padding: 50px;
+  padding: 2rem;
   text-align: center;
-  color: #e74c3c;
-}
-
-.error-boundary h2 {
-  font-size: 26px;
-  margin-bottom: 10px;
-}
-
-.error-boundary p {
-  font-size: 16px;
-}
-
-/* --- Responsive --- */
-@media screen and (max-width: 600px) {
-  .popup-form {
-    width: 90%;
-  }
-
-  .stock-card {
-    width: 90%;
-  }
-
-  .search-bar {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .search-bar input {
-    width: 100%;
-  }
+  color: var(--danger-color);
 }

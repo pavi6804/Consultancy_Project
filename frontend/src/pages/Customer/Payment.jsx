@@ -5,6 +5,9 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 import axios from "axios";
 import { message } from "antd";
 import { API } from "../../utils/api.js";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./Payment.css"; // Ensure you have a CSS file for styling
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -63,6 +66,10 @@ const Payment = () => {
         message.error(`Payment failed: ${error.message}`);
       } else if (paymentIntent.status === "succeeded") {
         message.success("Payment successful!");
+        toast.success('Order placed successfully!', {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
         navigate("/thank-you");
       }
     } catch (err) {

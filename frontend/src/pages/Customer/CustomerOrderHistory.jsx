@@ -14,14 +14,11 @@ const CustomerOrderHistory = ({ userId }) => {
         const response = await axios.get(`${API}orders/${userId}`);
         const data = response.data;
 
-
-        // Ensure the data is an array and include username
+        // Ensure the data is an array
         if (Array.isArray(data)) {
-          const ordersWithUsername = data.map((order) => ({ ...order, username }));
-          setOrders(ordersWithUsername);
+          setOrders(data);
         } else if (data.orders && Array.isArray(data.orders)) {
-          const ordersWithUsername = data.orders.map((order) => ({ ...order, username }));
-          setOrders(ordersWithUsername);
+          setOrders(data.orders);
         } else {
           console.error("Unexpected API response format:", data);
           message.error("Failed to load order history.");
