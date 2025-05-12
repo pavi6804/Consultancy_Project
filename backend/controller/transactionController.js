@@ -10,17 +10,6 @@ const getAllTransactions = async (req, res) => {
     }
 };
 
-// Fetch all transactions
-const getTransactions = async (req, res) => {
-  try {
-    const transactions = await Transaction.find();
-    res.status(200).json(transactions);
-  } catch (error) {
-    console.error("Error fetching transactions:", error);
-    res.status(500).json({ error: "Failed to fetch transactions" });
-  }
-};
-
 // Add a new transaction
 const addTransaction = async (req, res) => {
     const { date, type, category, quantity, price, company, transactionType, description } = req.body;
@@ -79,7 +68,6 @@ const deleteTransaction = async (req, res) => {
 
 module.exports = {
     getAllTransactions,
-    getTransactions,
     addTransaction,
     updateTransaction,
     deleteTransaction,
