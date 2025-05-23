@@ -14,7 +14,7 @@ import AdminPurchaseSales from "./pages/Admin/AdminPurchaseSales";
 import AdminBrowseStock from "./pages/Admin/AdminBrowseStock";
 
 // staff pages
-import StaffDashboard from "./pages/Staff/StaffDashboard";
+import StaffDashboard from "./pages/Staff/StaffDashBoard";
 import StaffPurchaseSales from "./pages/Staff/StaffPurchaseSales";
 import StaffBrowseStock from "./pages/Staff/StaffBrowseStock";
 
