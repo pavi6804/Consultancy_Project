@@ -49,6 +49,7 @@ function Login({ onLogin }) {
       }
     } catch (error) {
       toast.error("An error occurred during login.");
+      console.log(error);
     }
   };
   

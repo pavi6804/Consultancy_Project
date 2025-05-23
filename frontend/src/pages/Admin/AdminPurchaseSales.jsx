@@ -193,6 +193,7 @@ const PurchaseSales = () => {
     }
   };
 
+
   const handleEditTransaction = (index) => {
     const transactionToEdit = transactions[index];
     setEditingIndex(index);
@@ -204,81 +205,16 @@ const PurchaseSales = () => {
   };
 
   return (
-    <div className="container">
-      <ToastContainer /> {/* Add ToastContainer here */}
-      <h2>📦 Purchase & Sales Management</h2>
+  <div className="container">
+    <ToastContainer /> {/* Add ToastContainer here */}
+    <h2>📦 Purchase & Sales Management</h2>
 
-      <button className="add-btn" onClick={() => setShowForm(true)}>➕ Add New Transaction</button>
+    <button className="add-btn" onClick={() => setShowForm(true)}>➕ Add New Transaction</button>
 
-      {showForm && (
-        <div className="form-container">
-          <h3>{editingIndex !== null ? "✏️ Edit Transaction" : "➕ Add New Transaction"}</h3>
-          <div className="form">
-            <label>Date:</label>
-            <input type="date" value={newTransaction.date} onChange={(e) => handleInputChange("date", e.target.value)} />
-            
-            <label>Transaction Type:</label>
-            <select value={newTransaction.transactionType} onChange={(e) => handleInputChange("transactionType", e.target.value)}>
-              <option value="Purchase">Purchase</option>
-              <option value="Sale">Sale</option>
-            </select>
-
-            <label>Item:</label>
-            <select
-              value={newTransaction.type}
-              onChange={(e) => {
-                const selectedItem = stockData.find((item) => item.name === e.target.value);
-                setNewTransaction({
-                  ...newTransaction,
-                  type: e.target.value,
-                  category: selectedItem ? selectedItem.category : "",
-                  price: selectedItem ? selectedItem.price : 100, // Set default price from stock item
-                });
-              }}
-            >
-              <option value="">Select Item</option>
-              {stockData.map((item) => (
-                <option key={item._id} value={item.name}>{item.name}</option>
-              ))}
-            </select>
-
-            <label>Category:</label>
-            <input type="text" value={newTransaction.category || ""} readOnly placeholder="Category" />
-
-            <label>Quantity:</label>
-            <input type="number" value={newTransaction.quantity || ""} onChange={(e) => handleInputChange("quantity", e.target.value)} placeholder="Quantity" />
-
-            <label>Price:</label>
-            <input type="number" value={newTransaction.price || ""} onChange={(e) => handleInputChange("price", e.target.value)} placeholder="Price" />
-
-            <label>Company:</label>
-            <input type="text" value={newTransaction.company} onChange={(e) => handleInputChange("company", e.target.value)} placeholder="Company Name" />
-
-            <label>Description:</label>
-            <textarea value={newTransaction.description} onChange={(e) => handleInputChange("description", e.target.value)} placeholder="Enter description"></textarea>
-
-            <button onClick={handleAddOrUpdateTransaction}>
-              {editingIndex !== null ? "Save" : "Add"}
-            </button>
-            <button className="cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
-
-      {deleteIndex !== null && (
-        <div className="confirmation-modal">
-          <div className="confirm-modal-content">
-            <p>Are you sure you want to delete this transaction?</p>
-            <div className="confirm-modal-actions">
-              <button onClick={handleDeleteTransaction}>Yes</button>
-              <button onClick={() => setDeleteIndex(null)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
-
+    {/* Blur the background when the form is open */}
+    <div className={showForm || deleteIndex !== null ? "blurred-background" : ""}>
       <div className="table-container">
-        <table>
+        <table className="transactions-table">
           <thead>
             <tr>
               <th>Date</th>
@@ -312,9 +248,8 @@ const PurchaseSales = () => {
                       />
                       <FaTrashAlt
                         className="action-icon delete-icon"
-                        onClick={() =>
-                          setDeleteIndex(index)
-                        }
+                        onClick={() => setDeleteIndex(index)
+                          }
                       />
                     </div>
                   </td>
@@ -327,7 +262,64 @@ const PurchaseSales = () => {
         </table>
       </div>
     </div>
-  );
+
+    {/* Add/Edit Form */}
+    {showForm && (
+      <div className="form-container">
+        <h3>{editingIndex !== null ? "✏️ Edit Transaction" : "➕ Add New Transaction"}</h3>
+        <div className="form">
+          <label>Date:</label>
+          <input type="date" value={newTransaction.date} onChange={(e) => handleInputChange("date", e.target.value)} />
+          
+          <label>Transaction Type:</label>
+          <select value={newTransaction.transactionType} onChange={(e) => handleInputChange("transactionType", e.target.value)}>
+            <option value="Purchase">Purchase</option>
+            <option value="Sale">Sale</option>
+          </select>
+
+          <label>Item:</label>
+          <select
+            value={newTransaction.type}
+            onChange={(e) => {
+              const selectedItem = stockData.find((item) => item.name === e.target.value);
+              setNewTransaction({
+                ...newTransaction,
+                type: e.target.value,
+                category: selectedItem ? selectedItem.category : "",
+                price: selectedItem ? selectedItem.price : 100,
+              });
+            }}
+          >
+            <option value="">Select Item</option>
+            {stockData.map((item) => (
+              <option key={item._id} value={item.name}>{item.name}</option>
+            ))}
+          </select>
+
+          <label>Category:</label>
+          <input type="text" value={newTransaction.category || ""} readOnly placeholder="Category" />
+
+          <label>Quantity:</label>
+          <input type="number" value={newTransaction.quantity || ""} onChange={(e) => handleInputChange("quantity", e.target.value)} placeholder="Quantity" />
+
+          <label>Price:</label>
+          <input type="number" value={newTransaction.price || ""} onChange={(e) => handleInputChange("price", e.target.value)} placeholder="Price" />
+
+          <label>Company:</label>
+          <input type="text" value={newTransaction.company} onChange={(e) => handleInputChange("company", e.target.value)} placeholder="Company Name" />
+
+          <label>Description:</label>
+          <textarea value={newTransaction.description} onChange={(e) => handleInputChange("description", e.target.value)} placeholder="Enter description"></textarea>
+
+          <button onClick={handleAddOrUpdateTransaction}>
+            {editingIndex !== null ? "Save" : "Add"}
+          </button>
+          <button className="cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
+        </div>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default PurchaseSales;

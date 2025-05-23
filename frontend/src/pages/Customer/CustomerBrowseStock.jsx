@@ -16,7 +16,6 @@ const CustomerBrowseStock = ({ userId }) => {
     const fetchStocks = async () => {
       try {
         const response = await axios.get(`${ API }stock`);
-        console.log("Stocks API response:", response.data); // Debugging log
         setStocks(Array.isArray(response.data) ? response.data : []); // Ensure stocks is an array
       } catch (error) {
         console.error("Error fetching stocks:", error);

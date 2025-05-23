@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import "./App.css";
 
 // navbar components
 import AdminNavbar from "./components/AdminNavbar";
@@ -78,7 +79,7 @@ const App = () => {
           {role === "customer" && <CustomerNavbar onLogout={handleLogout} />}
         </>
       )}
-      <Routes>
+      <Routes>z
         {!isAuthenticated ? (
           <>
             <Route path="/login" element={<Login onLogin={(role) => onLogin(role)}/>} />

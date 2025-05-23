@@ -13,7 +13,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { API } from "../../utils/api.js"; 
+import { API } from "../../utils/api.js"; // Correct for default export
 
 const BrowseStock = () => {
   const [search, setSearch] = useState("");
@@ -108,9 +108,6 @@ const BrowseStock = () => {
         editingProduct
       );
   
-      // Log the API response for debugging
-      console.log("API response:", response.data);
-  
       // Update the stockData state with the updated product
       setStockData((prev) =>
         prev.map((item) =>
@@ -155,7 +152,6 @@ const BrowseStock = () => {
   );
 
   useEffect(() => {
-    console.log("Filtered stock data:", filteredStock); // Debugging log
   }, [filteredStock]);
 
   return (
@@ -254,96 +250,98 @@ const BrowseStock = () => {
         )}
 
         <div className="stock-grid">
-          {filteredStock.length > 0 ? (
-            filteredStock.map((stock, index) => (
-              <div
-                key={index}
-                className={`stock-card ${stock.quantity < 5 ? "low-stock" : ""}`}
-                data-category={stock.category}
-                style={{
-                  borderColor:
-                    categories.find((cat) => cat.name === stock.category)?.color || "#000",
-                }}
+  {filteredStock.length > 0 ? (
+    filteredStock.map((stock, index) => (
+      stock && stock._id ? ( // Ensure stock and stock._id are valid
+        <div
+          key={index}
+          className={`stock-card ${stock.quantity < 10 ? "low-stock" : ""}`}
+          data-category={stock.category}
+          style={{
+            borderColor:
+              categories.find((cat) => cat.name === stock.category)?.color || "#000",
+          }}
+        >
+          {editingProduct && editingProduct._id === stock._id ? (
+            <>
+              <input
+                type="text"
+                value={editingProduct.name}
+                onChange={(e) => handleInputChange("name", e.target.value)}
+                placeholder="Product Name"
+              />
+              <select
+                value={editingProduct.category}
+                onChange={(e) => handleInputChange("category", e.target.value)}
               >
-                {editingProduct && editingProduct._id === stock._id ? (
-                  <>
-                    <input
-                      type="text"
-                      value={editingProduct.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
-                      placeholder="Product Name"
-                    />
-                    <select
-                      value={editingProduct.category}
-                      onChange={(e) => handleInputChange("category", e.target.value)}
-                    >
-                      <option value="">Select Category</option>
-                      {categories.map((category, idx) => (
-                        <option key={idx} value={category.name}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="number"
-                      value={editingProduct.quantity}
-                      onChange={(e) => handleInputChange("quantity", e.target.value)}
-                      placeholder="Quantity"
-                    />
-                    <input
-                      type="number"
-                      value={editingProduct.price}
-                      onChange={(e) => handleInputChange("price", e.target.value)}
-                      placeholder="Price"
-                    />
-                    <textarea
-                      value={editingProduct.description}
-                      onChange={(e) => handleInputChange("description", e.target.value)}
-                      placeholder="Description"
-                    />
-                    <div className="actions">
-                      <button onClick={handleSaveProduct}>Save</button>
-                      <button
-                        className="cancel-btn"
-                        onClick={() => setEditingProduct(null)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="item-name">{stock.name}</p>
-                    <p><FaRupeeSign /> Price: ₹{stock.price}</p>
-                    <p><FaBoxes /> Available: {stock.quantity}</p>
-                    <p><strong>Category:</strong> {stock.category}</p>
-                    <p className="status">
-                      {stock.quantity < 5 ? <FaExclamationTriangle className="low-stock" /> : <FaCheckCircle className="in-stock" />}
-                      {stock.quantity < 5 ? " Restock Needed" : " In Stock"}
-                    </p>
-                    <div className="actions">
-                      <FaEdit
-                        className="action-icon edit-icon"
-                        onClick={() => handleEditProduct(stock)}
-                      />
-                      <FaTrashAlt
-                        className="action-icon delete-icon"
-                        onClick={() =>
-                          setShowConfirm({
-                            visible: true,
-                            action: () => handleDeleteProduct(stock._id),
-                          })
-                        }
-                      />
-                    </div>
-                  </>
-                )}
+                <option value="">Select Category</option>
+                {categories.map((category, idx) => (
+                  <option key={idx} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                value={editingProduct.quantity}
+                onChange={(e) => handleInputChange("quantity", e.target.value)}
+                placeholder="Quantity"
+              />
+              <input
+                type="number"
+                value={editingProduct.price}
+                onChange={(e) => handleInputChange("price", e.target.value)}
+                placeholder="Price"
+              />
+              <textarea
+                value={editingProduct.description}
+                onChange={(e) => handleInputChange("description", e.target.value)}
+                placeholder="Description"
+              />
+              <div className="actions">
+                <button onClick={handleSaveProduct}>Save</button>
+                <button
+                  className="cancel-btn"
+                  onClick={() => setEditingProduct(null)}
+                >
+                  Cancel
+                </button>
               </div>
-            ))
+            </>
           ) : (
-            <p className="no-results">No items found.</p>
+            <>
+              <p className="item-name">{stock.name}</p>
+              <p><FaRupeeSign /> Price: ₹{stock.price}</p>
+              <p><FaBoxes /> Available: {stock.quantity}</p>
+              <p><strong>Category:</strong> {stock.category}</p>
+              <p className="status">
+                {stock.quantity < 10 ? <FaExclamationTriangle className="low-stock" /> : <FaCheckCircle className="in-stock" />}
+                {stock.quantity < 10 ? " Restock Needed" : " In Stock"}
+              </p>
+              <div className="actions">
+                <FaEdit
+                  className="action-icon edit-icon"
+                  onClick={() => handleEditProduct(stock)}
+                />
+                <FaTrashAlt
+                  className="action-icon delete-icon"
+                  onClick={() =>
+                    setShowConfirm({
+                      visible: true,
+                      action: () => handleDeleteProduct(stock._id),
+                    })
+                  }
+                />
+              </div>
+            </>
           )}
         </div>
+      ) : null // Skip rendering if stock or stock._id is invalid
+    ))
+  ) : (
+    <p className="no-results">No items found.</p>
+  )}
+</div>
       </div>
     </ErrorBoundary>
   );

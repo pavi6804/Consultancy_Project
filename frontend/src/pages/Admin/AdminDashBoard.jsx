@@ -24,7 +24,6 @@ const Dashboard = () => {
     const fetchTransactions = async () => {
       try {
         const response = await axios.get(`${ API }transactions`);
-        console.log("Fetched transactions:", response.data); // Debugging log
         setTransactions(response.data);
 
         const transactions = response.data;
@@ -176,14 +175,8 @@ const Dashboard = () => {
   };
 
   const sendEmail = async () => {
-    console.log({
-        subject: `Transactions Report (${filterType})`,
-        body: filteredData,
-      });
 
     try {
-
-      
       await axios.post(`${ API }send-email`, {
         subject: `Transactions Report (${filterType})`,
         body: filteredData, // Replace with the actual email of the logged-in user
@@ -252,7 +245,7 @@ const Dashboard = () => {
       {view === "report" ? (
         <div className="report-section">
           <h3>Transactions Report</h3>
-          <table>
+          <table className="report-table">
             <thead>
               <tr>
                 <th>Date</th>

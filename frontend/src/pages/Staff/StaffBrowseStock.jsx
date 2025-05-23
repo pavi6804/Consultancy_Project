@@ -108,9 +108,6 @@ const BrowseStock = () => {
         editingProduct
       );
   
-      // Log the API response for debugging
-      console.log("API response:", response.data);
-  
       // Update the stockData state with the updated product
       setStockData((prev) =>
         prev.map((item) =>
@@ -155,7 +152,6 @@ const BrowseStock = () => {
   );
 
   useEffect(() => {
-    console.log("Filtered stock data:", filteredStock); // Debugging log
   }, [filteredStock]);
 
   return (

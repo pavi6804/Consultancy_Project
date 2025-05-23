@@ -6,8 +6,8 @@ import {
   FaEdit,
   FaTrashAlt,
 } from "react-icons/fa";
-import { API } from "../../utils/api.js"; // Correct for default export
-// Import the CSS file
+import { API } from "../../utils/api.js"; 
+import "./StaffPurchaseSales.css"; // Adjust the import based on your project structure
 
 const PurchaseSales = () => {
   const [transactions, setTransactions] = useState([]);
@@ -276,7 +276,7 @@ const PurchaseSales = () => {
       )}
 
       <div className="table-container">
-        <table>
+        <table className="transaction-table">
           <thead>
             <tr>
               <th>Date</th>

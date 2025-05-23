@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../utils/api.js'; // Ensure this path is correct
+import './CheckoutPage.css'; // Adjust the import based on your project structure
+import { ToastContainer, toast } from 'react-toastify';
 
 const CheckoutPage = () => {
   const [address, setAddress] = useState('');
@@ -24,6 +26,9 @@ const CheckoutPage = () => {
       setError('Please fill in all the fields.');
       return;
     }
+
+    localStorage.setItem('address', address);
+    localStorage.setItem('phoneNumber', phoneNumber);
 
     try {
       // Proceed to payment without showing success message here

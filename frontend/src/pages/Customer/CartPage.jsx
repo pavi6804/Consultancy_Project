@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, message } from "antd";
+import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API } from "../../utils/api.js"; // Correct for default export
+import { API } from "../../utils/api.js";
+import "./CartPage.css";
 
 const CartPage = ({ userId }) => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userId) {
-      console.error("User ID is null. Cannot fetch cart.");
+      message.error("User ID is null. Cannot fetch cart.");
+      setLoading(false);
       return;
     }
 
     const fetchCart = async () => {
       try {
-        const response = await axios.get(`${ API }cart/${userId}`);
-        console.log("Fetched cart data:", response.data.items);
+        const response = await axios.get(`${API}cart/${userId}`);
         setCart(response.data.items);
       } catch (error) {
         console.error("Error fetching cart:", error);
-        message.error("Failed to load cart. Please try again later.");
+        message.error(
+          error.response?.data?.message ||
+            "Failed to load cart. Please try again later."
+        );
+        setCart([]);
       } finally {
         setLoading(false);
       }
@@ -32,23 +38,25 @@ const CartPage = ({ userId }) => {
 
   const removeFromCart = async (stockId) => {
     try {
-      await axios.delete(`${ API }cart/remove/${userId}/${stockId}`);
-      setCart((prevCart) => prevCart.filter((item) => item.stockId._id !== stockId));
+      await axios.delete(`${API}cart/remove/${userId}/${stockId}`);
+      setCart((prevCart) =>
+        prevCart.filter((item) => item.stockId._id !== stockId)
+      );
       message.success("Item removed from cart!");
     } catch (error) {
       console.error("Error removing item from cart:", error);
-      message.error("Failed to remove item from cart.");
+      message.error(
+        error.response?.data?.message || "Failed to remove item from cart."
+      );
     }
   };
 
   const updateQuantity = async (stockId, change) => {
     try {
-      const response = await axios.put(
-        `{ API }cart/update-quantity/${userId}/${stockId}`,
+      await axios.put(
+        `${API}cart/update-quantity/${userId}/${stockId}`,
         { quantityChange: change }
       );
-
-      // Refresh local cart with updated data
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.stockId._id === stockId
@@ -56,76 +64,101 @@ const CartPage = ({ userId }) => {
             : item
         )
       );
+      message.success("Quantity updated!");
     } catch (error) {
       console.error("Error updating quantity:", error);
-      message.error(error.response?.data?.message || "Failed to update quantity.");
+      message.error(
+        error.response?.data?.message || "Failed to update quantity."
+      );
     }
   };
-  const navigate = useNavigate();
 
   const proceedToCheckout = () => {
-    message.success("Proceeding to checkout...");
-    navigate("/checkout");
+    try {
+      message.success("Proceeding to checkout...");
+      navigate("/checkout");
+    } catch (error) {
+      console.error("Error proceeding to checkout:", error);
+      message.error("Failed to proceed to checkout. Please try again.");
+    }
   };
 
+  // Calculate total price
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + (item.stockId.price || 0) * (item.quantity || 1),
+    0
+  );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Your Cart</h1>
+    <div className="cart-container">
+      <h2 className="cart-title">Your Cart</h2>
       {loading ? (
         <p>Loading...</p>
       ) : cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-            {cart.map((item, index) => (
-              <Card
-                key={`${item.stockId._id}-${index}`}
-                title={item.stockId.name}
-                style={{ width: 300 }}
-              >
-                <p>Price: ${item.stockId.price}</p>
-                <p>Quantity: {item.quantity}</p>
-                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                  <Button
-                    onClick={() => {
-                      if (item.quantity <= 1) {
-                        message.error("Cannot decrease quantity below 1.");
-                        return;
-                      }
-                      updateQuantity(item.stockId._id, -1);
-                    }}
-                  >
-                    -
-                  </Button>
-                  <span>{item.quantity}</span>
-                  <Button
-                    onClick={() => {
-                      if (item.quantity >= item.stockId.quantity) {
-                        message.error("Cannot increase quantity beyond available stock.");
-                        return;
-                      }
-                      updateQuantity(item.stockId._id, 1);
-                    }}
-                  >
-                    +
-                  </Button>
-                </div>
-                <Button
-                  danger
-                  style={{ marginTop: "10px" }}
-                  onClick={() => removeFromCart(item.stockId._id)}
-                >
-                  Remove
-                </Button>
-              </Card>
-            ))}
+          <table className="cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item) => (
+                <tr key={item.stockId._id}>
+                  <td>{item.stockId.name}</td>
+                  <td>
+                    <div className="quantity-controls">
+                      <button
+                        onClick={() => {
+                          if (item.quantity <= 1) {
+                            message.error("Cannot decrease quantity below 1.");
+                            return;
+                          }
+                          updateQuantity(item.stockId._id, -1);
+                        }}
+                      >
+                        -
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        onClick={() => {
+                          if (item.quantity >= item.stockId.quantity) {
+                            message.error(
+                              "Cannot increase quantity beyond available stock."
+                            );
+                            return;
+                          }
+                          updateQuantity(item.stockId._id, 1);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
+                  <td>₹{item.stockId.price}</td>
+                  <td>
+                    <button
+                      className="remove-button"
+                      onClick={() => removeFromCart(item.stockId._id)}
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="cart-total">
+            Total: <span>₹{totalPrice}</span>
           </div>
-          <h2>Total Price: ${cart.reduce((total, item) => total + item.stockId.price * item.quantity, 0)}</h2>
-          <Button type="primary" style={{ marginTop: "20px" }} onClick={proceedToCheckout}>
+          <button className="checkout-button" onClick={proceedToCheckout}>
             Proceed to Checkout
-          </Button>
+          </button>
         </>
       )}
     </div>
