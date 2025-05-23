@@ -105,17 +105,27 @@ h2 {
   color: #c82333;
 }
 
-/* Input Form Styling */
+/* Limit modal height and make it scrollable if content is too tall */
 .form-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(60, 72, 88, 0.12);
+  padding: 2rem 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  margin: 20px auto;
-  max-width: 600px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  gap: 1rem;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
 
 .form-container label {
   margin-bottom: 10px;

@@ -1,2 +1,2 @@
-export const API = "http://localhost:3000/";  //"https://consultancy-project-hxmz.onrender.com";   
+export const API = "https://consultancy-project-hss3.onrender.com/";  //"http://localhost:3000/";   
 

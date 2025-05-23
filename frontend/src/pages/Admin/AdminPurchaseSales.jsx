@@ -265,6 +265,7 @@ const PurchaseSales = () => {
 
     {/* Add/Edit Form */}
     {showForm && (
+      <div className="modal-overlay">
       <div className="form-container">
         <h3>{editingIndex !== null ? "✏️ Edit Transaction" : "➕ Add New Transaction"}</h3>
         <div className="form">
@@ -316,6 +317,7 @@ const PurchaseSales = () => {
           </button>
           <button className="cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
         </div>
+      </div>
       </div>
     )}
   </div>
