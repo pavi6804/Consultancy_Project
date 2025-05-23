@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.use(cors({ origin: "http://localhost:5173" })); // Allow requests from the frontend
+app.use(cors({ origin: "https://consultancy-project-35jm.vercel.app/" })); // Allow requests from the frontend
 app.use(express.json()); // Parse JSON request bodies
 app.use("/users", userRoutes); 
 app.use("/send-email", emailRouter);
